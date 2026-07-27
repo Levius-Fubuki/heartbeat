@@ -1,0 +1,68 @@
+/* 桌宠页:透明背景 + 状态精灵图 + 气泡。
+   后端发抽象表情状态(idle/alert/settle/talk/engaged/thinking/waiting/doze_off),
+   pet.js 给 #pet 加 state-<state> 类,这里按状态切换 .pet-body 背景图并附微动画。
+   各状态共用同一载体,仅背景图 + 微动画不同 → 切状态不跳位。pet.js 不改。*/
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent: #c9d6e5;                 /* pet.js 按 meta 人格覆盖 */
+  --accent-soft: color-mix(in srgb, var(--accent) 55%, transparent);
+  --accent-faint: color-mix(in srgb, var(--accent) 16%, transparent);
+  --sans: "Hanken Grotesk", "PingFang SC", "Helvetica Neue", sans-serif;
+}
+html, body { height: 100%; background: transparent; }
+body {
+  font-family: var(--sans);
+  overflow: hidden; user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+/* 精灵贴窗口底部摆放 → 上方整块留给气泡,避免气泡被窗口顶边裁切。
+   (旧版 top:52% 居中时,180px 精灵 + 上方气泡会顶出 250px 窗口被裁。)*/
+#pet { position: absolute; left: 50%; bottom: 6px; transform: translateX(-50%); }
+
+/* 精灵图载体:180×180 方框,背景 contain 居中无变形;drop-shadow 给浮空质感。
+   transition 让 scale/opacity 在进/出静态形变状态时平滑过渡。*/
+.pet-body {
+  width: 180px; height: 180px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  position: relative;
+  transition: transform .2s ease, opacity .4s ease, filter .2s ease;
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, .35));
+}
+
+/* 状态 → 微动画 + 静态形变(让静态图也"活着")。背景图由 pet.js 按「当前人格 + 状态」
+   动态拼 URL 设置(/personas/image/<persona>/<persona>-<state>.png):切人格(meta)/切状态
+   (expression)都由 JS 换图,CSS 只管各状态的动画与形变。*/
+#pet.state-idle .pet-body     { animation: breathe 3.6s ease-in-out infinite; }
+#pet.state-alert .pet-body    { transform: scale(1.06); filter: drop-shadow(0 6px 12px rgba(0,0,0,.4)) brightness(1.05); }
+#pet.state-settle .pet-body   { transform: scale(.96); opacity: .9; }
+#pet.state-talk .pet-body     { animation: bob 1s ease-in-out infinite; }
+#pet.state-engaged .pet-body  { animation: bounce 1.3s ease-in-out infinite; }
+#pet.state-thinking .pet-body { animation: tilt 2.2s ease-in-out infinite; }
+#pet.state-waiting .pet-body  { animation: breathe 4.4s ease-in-out infinite; }
+#pet.state-doze_off .pet-body { transform: scale(.92); opacity: .62; filter: drop-shadow(0 8px 14px rgba(0,0,0,.35)) brightness(.82); }
+
+@keyframes breathe { 0%,100%{transform:scale(1);} 50%{transform:scale(1.04);} }
+@keyframes bob     { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-7px);} }
+@keyframes bounce  { 0%,100%{transform:translateY(0) scale(1);} 50%{transform:translateY(-5px) scale(1.03);} }
+@keyframes tilt    { 0%,100%{transform:rotate(-3.5deg);} 50%{transform:rotate(3.5deg);} }
+
+/* 气泡 */
+.speech {
+  position: absolute; bottom: 100%; left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  background: #fff; color: #2a2b3d; padding: 8px 12px; border-radius: 14px;
+  font-family: var(--sans); font-size: 13px; line-height: 1.4; width: 200px; min-width: 56px; text-align: center;
+  max-height: 72px; overflow-y: auto; word-break: break-word; white-space: pre-wrap;
+  border: 1px solid var(--accent-faint);   /* 一缕人格色发丝,Dawn 家族呼应(白底保桌面可读) */
+  box-shadow: 0 4px 14px #00000055, 0 0 16px -4px color-mix(in srgb, var(--accent) 45%, transparent);
+  animation: pop .2s ease;
+}
+.speech::-webkit-scrollbar { width: 4px; }
+.speech::-webkit-scrollbar-thumb { background: #00000033; border-radius: 2px; }
+.speech.hidden { display: none; }
+@keyframes pop { from{transform:translateX(-50%) translateY(-4px) scale(.8);opacity:0;} to{transform:translateX(-50%) translateY(-10px) scale(1);opacity:1;} }
+
+/* 就地输入框已改用独立普通窗口承载(见 input.html + shell/window.py build_input_window),
+   桌宠页不再内嵌输入框 / badge,相关样式已移除。*/

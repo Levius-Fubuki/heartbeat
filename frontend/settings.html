@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>设置 · Heartbeat</title>
+  <link rel="stylesheet" href="/static/fonts.css" />
+  <link rel="stylesheet" href="/static/settings.css" />
+</head>
+<body>
+  <div id="app">
+    <div class="atmos" aria-hidden="true">
+      <div class="dawn-glow"></div>
+      <div class="stars stars-a"></div>
+      <div class="stars stars-b"></div>
+      <div class="grain"></div>
+    </div>
+
+    <header class="top">
+      <span class="sigil" aria-hidden="true">✦</span>
+      <h1>设置</h1>
+      <p class="sub">配置陪伴的大脑与脾气 —— 改完记得保存。</p>
+    </header>
+
+    <main class="form-scroll">
+      <section class="card">
+        <h2 class="sec-title">大模型</h2>
+        <p class="sec-hint">仅本地保存(这台机器),云端无关。<span class="hl">模型/地址/Key 保存即热生效</span>,无需重启。</p>
+
+        <div class="field">
+          <label for="provider">厂商</label>
+          <select id="provider"><option value="deepseek">DeepSeek</option></select>
+        </div>
+
+        <div class="field">
+          <label for="base-url">接入地址 · Base URL</label>
+          <input id="base-url" type="text" placeholder="https://api.deepseek.com" spellcheck="false" />
+        </div>
+
+        <div class="field">
+          <label for="api-key">API Key <span class="hint" id="key-hint"></span></label>
+          <input id="api-key" type="password" placeholder="粘贴你的 key" autocomplete="off" spellcheck="false" />
+        </div>
+
+        <div class="row">
+          <button id="fetch-btn" type="button" class="ghost">从官网拉取模型</button>
+          <span id="fetch-status" class="status"></span>
+        </div>
+
+        <div class="field">
+          <label for="model-select">使用模型</label>
+          <select id="model-select"></select>
+          <input id="model-manual" type="text" class="manual" placeholder="或手动输入模型名(优先于下拉)" spellcheck="false" />
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 class="sec-title">陪伴参数</h2>
+        <p class="sec-hint">每项都有说明。<span class="badge restart">↻</span> 需重启生效,其余保存即热生效;<span class="badge priv">🔒</span> 涉及隐私。</p>
+        <div id="knobs"></div>
+      </section>
+
+      <section class="card">
+        <h2 class="sec-title">工具与权限</h2>
+        <p class="sec-hint">任务模式下,它能读你的本地文件、联网查资料。<span class="hl">文件 / 联网搜索的总开关在上方「陪伴参数」</span>;这里管它能读哪些目录、搜索用什么 key。</p>
+
+        <div class="field">
+          <label>允许读取的额外目录</label>
+          <p class="field-sub">桌面 / 文档 / 下载 默认已允许;下面是你额外开放的目录(它只能读这些地方里的文件,且只读)。</p>
+          <ul id="allowed-dirs" class="dir-list"></ul>
+          <button id="pick-dir" type="button" class="ghost">＋ 选择文件夹</button>
+        </div>
+
+        <div class="field">
+          <label for="tavily-key">联网搜索 · Tavily Key <span class="hint" id="tavily-hint"></span></label>
+          <input id="tavily-key" type="password" placeholder="粘贴 Tavily key(留空保持不变)" autocomplete="off" spellcheck="false" />
+          <p class="field-sub">免费申请:tavily.com。仅本地保存,绝不外发;留空则联网搜索不可用。</p>
+        </div>
+
+        <div class="field">
+          <label for="siliconflow-key">语音克隆 · 硅基流动 Key <span class="hint" id="siliconflow-hint"></span></label>
+          <input id="siliconflow-key" type="password" placeholder="粘贴硅基流动 key(留空保持不变)" autocomplete="off" spellcheck="false" />
+          <p class="field-sub">语音引擎选「cosyvoice」时用(CosyVoice2,可声音克隆,比 edge 更有人格味)。硅基流动平台申请,按请求计费;仅本地保存,绝不外发;留空则 cosyvoice 不可用、自动回退。</p>
+        </div>
+
+        <div class="field">
+          <label for="cmd-allowlist">执行命令 · 白名单</label>
+          <textarea id="cmd-allowlist" rows="5" spellcheck="false" placeholder="git&#10;ls&#10;cat&#10;python3&#10;node"></textarea>
+          <p class="field-sub">任务模式下允许它跑哪些命令(一行一个,取命令首词)。破坏性命令(rm / dd / sudo 等)和管道 | / 重定向 &gt; / 拼接 &amp;&amp; 一律拒绝;留空 = 禁用执行命令。「写入文件 / 执行命令」两个总开关在上方「陪伴参数」。即使开了,每次写 / 执行前仍会先弹窗等你确认。</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bar">
+      <span id="save-status" class="status"></span>
+      <button id="save-btn" type="button">保存</button>
+    </footer>
+  </div>
+  <script src="/static/settings.js"></script>
+</body>
+</html>

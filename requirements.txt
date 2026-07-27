@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+pywebview
+pyyaml
+python-dotenv
+openai
+pyobjc-framework-ApplicationServices  # AXUIElement 取窗口标题(辅助功能 API)
+numpy            # Phase 4 向量召回(fastembed 依赖 + l3 向量矩阵)
+fastembed        # Phase 4 本地嵌入(BAAI/bge-small-zh-v1.5,首次下载 ~130MB ONNX)
+pypdf            # 附件 PDF 解析(纯本地)
+python-docx      # 附件 .docx 解析(纯本地;import 名 docx)

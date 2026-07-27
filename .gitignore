@@ -1,0 +1,31 @@
+# Python
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# 运行时数据(用户隐私,绝不入库)
+# 整个 memory/ 只保留 .gitkeep —— 堵住 .bak / .tmp 等一切衍生文件
+memory/*
+!memory/.gitkeep
+
+# 日志
+logs/*.log
+logs/*.log.*
+
+# 本地凭据 / 环境
+.env
+.env.local
+.env.*.local
+
+# 系统
+.DS_Store
+Thumbs.db
+
+# 备份与临时
+*.bak
+*.bak.*
+*.tmp

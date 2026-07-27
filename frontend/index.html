@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heartbeat</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div id="app">
+    <div id="pet-area">
+      <div id="pet" class="state-idle">
+        <div class="pet-body">
+          <div class="eye left"></div>
+          <div class="eye right"></div>
+        </div>
+        <div id="speech" class="speech hidden"></div>
+      </div>
+    </div>
+
+    <div id="status">
+      <span id="persona-name">…</span>
+      <span id="sep"> · </span>
+      <span id="state-label">呼吸中…</span>
+    </div>
+
+    <div id="chat"></div>
+
+    <form id="input-bar">
+      <input id="msg" type="text" placeholder="对它说点什么…" autocomplete="off" />
+      <button type="submit">送出</button>
+    </form>
+  </div>
+
+  <script src="/static/ws.js"></script>
+  <script src="/static/pet.js"></script>
+</body>
+</html>

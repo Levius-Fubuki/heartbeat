@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heartbeat</title>
+  <link rel="stylesheet" href="/static/fonts.css" />
+  <link rel="stylesheet" href="/static/chat.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- 大气层:深夜天幕之上,黎明日彩晕(人格色)+ 极淡星点 + 颗粒。pointer-events:none,纯氛围。 -->
+    <div class="atmos" aria-hidden="true">
+      <div class="dawn-glow"></div>
+      <div class="stars stars-a"></div>
+      <div class="stars stars-b"></div>
+      <div class="grain"></div>
+    </div>
+
+    <header id="status">
+      <select id="model-chip" class="chip" title="使用的模型"></select>
+      <button id="settings-trigger" class="gear" type="button" title="设置" aria-label="设置">⚙</button>
+      <button id="voice-toggle" class="voice-btn" type="button" title="语音朗读" aria-label="语音朗读"><svg class="voice-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a8 8 0 0 1 0 11"/></svg></button>
+      <span class="halo" aria-hidden="true"></span>
+      <span class="sigil" aria-hidden="true">✦</span>
+      <div id="persona-trigger" role="button" tabindex="0" title="切换陪伴人格">
+        <span id="persona-name">…</span><span class="chev" aria-hidden="true">▾</span>
+      </div>
+      <div id="persona-cyr" class="cyr"></div>
+      <div class="meta-line">
+        <span id="persona-arch" class="arch"></span><span id="sep" class="dot" hidden>·</span><span id="state-label">呼吸中…</span><span id="sep2" class="dot" hidden>·</span><span id="interview-trigger" role="button" tabindex="0" title="和我聊聊,让我更懂你" hidden>认识我</span>
+        <button id="skip-interview" type="button" hidden>跳过访谈</button>
+      </div>
+    </header>
+
+    <div id="cooldown-bar" title="我多久主动找你聊一次">
+      <span class="cd-label">主动</span>
+      <button class="cd-btn" data-mode="conservative" type="button">保守</button>
+      <button class="cd-btn" data-mode="balanced" type="button">平衡</button>
+      <button class="cd-btn" data-mode="active" type="button">活跃</button>
+    </div>
+
+    <main id="chat"></main>
+
+    <div id="attach-bar" hidden>
+      <span class="ag" aria-hidden="true">📎</span><span id="attach-name"></span>
+      <button id="attach-remove" type="button" title="移除附件" aria-label="移除附件">✕</button>
+    </div>
+
+    <form id="input-bar">
+      <button id="attach-btn" type="button" title="附加文件" aria-label="附加文件">＋</button>
+      <input id="msg" type="text" placeholder="对它说点什么…" autocomplete="off" />
+      <button id="send-btn" type="submit" aria-label="送出"><span class="send-glyph" aria-hidden="true">➤</span></button>
+    </form>
+
+    <div id="attach-menu" hidden>
+      <button id="attach-file-item" type="button">📎&nbsp;&nbsp;附加文件</button>
+    </div>
+
+    <div id="onboarding" hidden>
+      <div class="atmos onb-atmos" aria-hidden="true">
+        <div class="dawn-glow"></div>
+        <div class="stars stars-a"></div>
+        <div class="stars stars-b"></div>
+        <div class="grain"></div>
+      </div>
+      <button id="onb-close" type="button" title="关闭" hidden>✕</button>
+      <div class="onb-card">
+        <div class="onb-sigil" aria-hidden="true">✦</div>
+        <h2 id="onb-title">想让我是哪一种存在?</h2>
+        <p id="onb-hint" class="onb-hint">选一个开始,之后还能再换。</p>
+        <div id="persona-grid"></div>
+      </div>
+    </div>
+
+    <div id="confirm-overlay" hidden>      <!-- Phase 6d:写/删/执行前逐次授权 -->
+      <div class="confirm-card">
+        <div class="confirm-sigil" aria-hidden="true">✦</div>
+        <h2 class="confirm-title">需要你确认一下</h2>
+        <div id="confirm-tool" class="confirm-tool"></div>
+        <pre id="confirm-args" class="confirm-args"></pre>
+        <p id="confirm-summary" class="confirm-summary"></p>
+        <div class="confirm-actions">
+          <button id="confirm-deny" type="button" class="confirm-btn deny">拒绝</button>
+          <button id="confirm-allow" type="button" class="confirm-btn allow">允许</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/static/chat.js"></script>
+</body>
+</html>

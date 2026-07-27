@@ -1,0 +1,98 @@
+/* 就地输入框窗:Dawn Observatory 迷你版。复用主窗 chat 的字体/配色家族
+   (Hanken Grotesk 正文 + 人格色 accent 衍生 + Cormorant 空态),保持一个家族。
+   body 透明,透出 NSWindow 的半透明深色底(见 shell/window.py build_input_window)。*/
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent: #c9d6e5;                 /* 默认 Zorya;pet.js/meta 按人格覆盖 */
+  --accent-soft: color-mix(in srgb, var(--accent) 55%, transparent);
+  --accent-faint: color-mix(in srgb, var(--accent) 16%, transparent);
+  --panel: rgba(22, 25, 48, 0.55);
+  --panel-solid: #161a30;
+  --hairline: rgba(199, 205, 230, 0.12);
+  --text: #e9eaf4;
+  --muted: #7e83a6;
+  --muted-2: #5b6083;
+  --sans: "Hanken Grotesk", "PingFang SC", "Helvetica Neue", sans-serif;
+  --serif: "Cormorant Garamond", "Songti SC", "PingFang SC", serif;
+}
+html, body { height: 100%; }
+body {
+  font-family: var(--sans);
+  background: transparent;                          /* 透出窗口底色 */
+  color: var(--text); overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+#app {
+  position: relative; display: flex; flex-direction: column;
+  height: 100vh; padding: 8px; gap: 6px;
+}
+/* 一抹黎明日:人格色顶部极淡晕染,与主窗同源(z 0 在内容下) */
+#app::before {
+  content: ""; position: absolute; left: -5%; right: -5%; top: -12%; height: 75%;
+  background: radial-gradient(60% 90% at 50% 0%, var(--accent-faint), transparent 72%);
+  pointer-events: none; z-index: 0;
+}
+
+#reply {
+  position: relative; z-index: 1;
+  flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 5px;
+  scrollbar-width: thin; scrollbar-color: var(--accent-faint) transparent;
+}
+#reply::-webkit-scrollbar { width: 5px; }
+#reply::-webkit-scrollbar-track { background: transparent; }
+#reply::-webkit-scrollbar-thumb { background: var(--accent-faint); border-radius: 999px; }
+#reply:empty::before {
+  content: "单击桌宠收起 · 双击开主窗";
+  font-family: var(--serif); font-style: italic; font-size: 12px;
+  color: var(--muted); margin: auto; text-align: center; letter-spacing: .03em;
+}
+
+.msg {
+  max-width: 88%; padding: 5px 9px; border-radius: 11px;
+  font-size: 12px; line-height: 1.45; word-break: break-word;
+  animation: msgIn .28s ease both;
+}
+@keyframes msgIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+/* agent:半透深色卡 + 发丝 + accent 左缘(主窗同源) */
+.msg.agent {
+  align-self: flex-start;
+  background: var(--panel); border: 1px solid var(--hairline);
+  border-left: 2px solid var(--accent-soft);
+  border-bottom-left-radius: 4px;
+}
+/* user:人格色淡染气泡 */
+.msg.user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 30%, #23254a),
+              color-mix(in srgb, var(--accent) 18%, #1a1c38));
+  color: #f4f5fb; border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-bottom-right-radius: 4px;
+}
+
+#input-bar { position: relative; z-index: 1; display: flex; gap: 6px; flex-shrink: 0; align-items: center; }
+#msg {
+  flex: 1; min-width: 0; padding: 7px 11px; border-radius: 11px;
+  border: 1px solid var(--hairline); background: var(--panel);
+  color: var(--text); font-family: var(--sans); font-size: 13px; outline: none;
+  transition: border-color .16s ease, box-shadow .16s ease;
+}
+#msg::placeholder { color: var(--muted-2); }
+#msg:focus {
+  border-color: var(--accent-soft);
+  box-shadow: 0 0 0 1.5px var(--accent-faint), 0 0 14px -4px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+/* 圆形 accent 发送钮(主窗同款) */
+#send-btn {
+  flex-shrink: 0; width: 34px; height: 34px; padding: 0; border: none; border-radius: 50%; cursor: pointer;
+  background: linear-gradient(140deg, color-mix(in srgb, var(--accent) 92%, white),
+              color-mix(in srgb, var(--accent) 70%, #2a2c52));
+  box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--accent) 55%, transparent);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .12s ease, filter .16s ease;
+}
+#send-btn:hover { transform: translateY(-1px); filter: brightness(1.06); }
+#send-btn:active { transform: translateY(0); }
+#send-btn:disabled { opacity: .5; cursor: default; transform: none; }
+.send-glyph { color: #14152b; font-size: 13px; transform: translateX(1px); }
+
+@media (prefers-reduced-motion: reduce) { .msg { animation: none !important; } }

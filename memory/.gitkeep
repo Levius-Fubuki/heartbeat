@@ -1,0 +1,2 @@
+# 此目录存放 Heartbeat 的持久化记忆(L2 用户档案 profile.yaml / L3 情景日志 episodic.jsonl)。
+# 两者均为用户隐私,已在 .gitignore 排除;本占位文件仅用于让目录进 git。
