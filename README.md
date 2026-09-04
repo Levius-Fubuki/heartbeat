@@ -70,7 +70,7 @@ Heartbeat 反过来。它像一个真正在场的伙伴:周期性「心跳」感
 ## 🚀 快速开始
 
 ```bash
-git clone <repo> && cd heartbeat
+git clone https://github.com/Levius-Fubuki/heartbeat.git && cd heartbeat
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 cp .env.example .env        # 填入 HEARTBEAT_LLM_API_KEY(必需;DeepSeek/智谱/OpenAI/Ollama 均可)
 .venv/bin/python main.py    # 打开透明桌宠 + 自动弹出主窗口
